@@ -2,12 +2,14 @@ package render
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
 
 	"github.com/alexanderosadc/go-web-app/pkg/config"
+	"github.com/alexanderosadc/go-web-app/pkg/models"
 )
 
 var app *config.AppConfig
@@ -18,7 +20,7 @@ func NewTemplates(a *config.AppConfig) {
 }
 
 // RenderTemplate renders a template
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 	var tc map[string]*template.Template
 	var err error
 
@@ -41,9 +43,10 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
 	buf := new(bytes.Buffer)
 
-	if err = t.Execute(buf, nil); err != nil {
+	if err = t.Execute(buf, td); err != nil {
 		log.Println("error writing template to browser")
 	}
+	fmt.Println(td)
 
 	//renders the template
 	if _, err = buf.WriteTo(w); err != nil {
