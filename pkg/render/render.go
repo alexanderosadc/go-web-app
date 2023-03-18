@@ -2,7 +2,6 @@ package render
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -46,7 +45,6 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 	if err = t.Execute(buf, td); err != nil {
 		log.Println("error writing template to browser")
 	}
-	fmt.Println(td)
 
 	//renders the template
 	if _, err = buf.WriteTo(w); err != nil {
